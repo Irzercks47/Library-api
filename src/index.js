@@ -1,9 +1,10 @@
 const express = require("express")
 const app = express()
-const port = 3000
 const v1Route = require("./v1/routes")
+const CONFIG = require("../config.js")
 
-app.use("/library/v1", v1Route)
+const port = CONFIG.PORT
+app.use("/v1", v1Route)
 
 //root
 app.listen(port, () => {

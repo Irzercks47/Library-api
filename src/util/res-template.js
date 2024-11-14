@@ -1,4 +1,4 @@
-export const successResp = (data) => {
+const successResp = (data) => {
     return {
         header : "",
         payload : data,
@@ -9,9 +9,11 @@ export const successResp = (data) => {
     }
 }
 
-export const failedResp = (message) => {
+const failedResp = (message) => {
     return {
         header : "",
         message : "",
     }
 }
+
+module.exports = respose_template;
