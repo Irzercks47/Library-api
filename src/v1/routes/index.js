@@ -8,33 +8,38 @@ router.get('/books', (req, res) => {
 })
 
 //add book
-router.post("/addbook", (req, res) => {
+router.post("/addbooks", (req, res) => {
     console.log(req.body)
     res.send("success")
 })
 
 //fetch detailed book data
-router.get("/book/:id", (req, res) => {
+router.get("/books/:id", (req, res) => {
     res.send("test")
 })
 
 //delete book data
-router.delete("/deletebook", (req, res) =>{
+router.delete("/deletebooks", (req, res) => {
+    res.send("test")
+})
+
+//edit book data
+router.put("/editbooks/:id", (req, res) => {
     res.send("test")
 })
 
 //borrowing book
-router.put("/borrowbook", (req, res) => {
+router.put("/borrowbooks", (req, res) => {
     res.send("test")
 })
 
 //return book
-router.put("/returnbook", (req, res) => {
+router.put("/returnbooks", (req, res) => {
     res.send("test")
 })
 
 //get library lending log
-router.get("/log", (req, res) => {
+router.get("/logs", (req, res) => {
     res.send("test")
 })
 
