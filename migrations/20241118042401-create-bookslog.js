@@ -1,11 +1,8 @@
 'use strict';
-
-const bookscatalogue = require('../models/bookscatalogue');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('logs', {
+    await queryInterface.createTable('bookslogs', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,35 +10,32 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       bookId: {
-        type: Sequelize.INTEGER,
-        underscored: true,
-        references: {
-          model: bookscatalogue,
-          key: 'id',
-        },
-      },
-      amount: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
-      returnDate: {
-        type: Sequelize.DATE,
-        underscored: true
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      statusId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      amount: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        underscored: true
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        underscored: true
+        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('logs');
+    await queryInterface.dropTable('bookslogs');
   }
 };
-
-bookscatalogue.hasMany(logs);
