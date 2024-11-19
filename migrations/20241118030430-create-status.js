@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       status_name: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,

@@ -10,32 +10,29 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       book_name: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       summary: {
         type: Sequelize.TEXT,
-        underscored: true
       },
       book_cover: {
         type: Sequelize.STRING,
-        underscored: true
       },
       date_published: {
         type: Sequelize.DATE,
-        underscored: true
       },
       stock: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        underscored: true
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        underscored: true
       }
     });
   },

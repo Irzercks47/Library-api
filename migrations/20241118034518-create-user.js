@@ -16,14 +16,15 @@ module.exports = {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
       },
       password: {
         allowNull: false,
         type: Sequelize.STRING
       },
       role_id: {
-        underscored: true,
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model:"roles",
