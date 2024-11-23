@@ -327,7 +327,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-      // Now a total of 40 records
     ]);
   },
 
