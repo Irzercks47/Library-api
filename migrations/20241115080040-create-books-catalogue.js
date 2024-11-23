@@ -13,6 +13,9 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
+      author: {
+        type: Sequelize.STRING,
+      },
       summary: {
         type: Sequelize.TEXT,
       },
