@@ -1,10 +1,11 @@
 const express = require("express")
 const router = express.Router();
+const { showBooks } = require("../controller/books-controller")
 
 /**book**/
 //fetch all book data
 router.get('/books', (req, res) => {
-    res.send("Hello biatch!!!")
+    showBooks(res)
 })
 
 //add book
