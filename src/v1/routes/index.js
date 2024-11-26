@@ -19,7 +19,7 @@ router.get("/books/:id", (req, res) => {
 })
 
 //delete book data
-router.delete("/deletebooks", (req, res) => {
+router.delete("/deletebooks/:id", (req, res) => {
     res.send("test")
 })
 
@@ -29,12 +29,12 @@ router.put("/editbooks/:id", (req, res) => {
 })
 
 //borrowing book
-router.put("/borrowbooks", (req, res) => {
+router.put("/borrowbooks/:id", (req, res) => {
     res.send("test")
 })
 
 //return book
-router.put("/returnbooks", (req, res) => {
+router.put("/returnbooks/:id", (req, res) => {
     res.send("test")
 })
 

@@ -1,18 +1,18 @@
 const successResp = (data) => {
     return {
-        header : "",
-        payload : data,
-        pagination : {
-            page : "",
-            max : "",
+        meta: "",
+        payload: data,
+        pagination: {
+            pages: "",
+            total_pages: "",
         },
     }
 }
 
-const failedResp = (message) => {
+const failedResp = (message, code) => {
     return {
-        header : "",
-        message : "",
+        header: "",
+        message: "",
     }
 }
 

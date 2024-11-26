@@ -6,13 +6,13 @@ module.exports = {
     return queryInterface.bulkInsert('statuses', [
       {
         status_name: 'borrow',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        created_at: new Date(),
+        updated_at: new Date(),
       },
       {
         status_name: 'return',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        created_at: new Date(),
+        updated_at: new Date(),
       },
     ]);
   },
