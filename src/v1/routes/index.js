@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const { showBooks } = require("../controller/books-controller")
+const { showBooks, getBooksbyId, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
 
 /**book**/
 //fetch all book data
@@ -10,23 +10,27 @@ router.get('/books', (req, res) => {
 
 //add book
 router.post("/addbooks", (req, res) => {
-    console.log(req.body)
-    res.send("success")
+    const body = req.body
+    addBooks(res, body)
 })
 
 //fetch detailed book data
 router.get("/books/:id", (req, res) => {
-    res.send("test")
+    const id = req.params.id
+    getBooksbyId(res, id)
 })
 
 //delete book data
 router.delete("/deletebooks/:id", (req, res) => {
-    res.send("test")
+    const id = req.params.id
+    deleteBooks(res, id)
 })
 
 //edit book data
 router.put("/editbooks/:id", (req, res) => {
-    res.send("test")
+    const id = req.params.id
+    const body = req.body
+    updateBooks(res, id, body)
 })
 
 //borrowing book
