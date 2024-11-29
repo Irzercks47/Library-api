@@ -20,11 +20,14 @@ const showLogs = async (res) => {
 //borrow book logs
 const borrowBooks = async (res, id, body) => {
     ({ user_id, status_id, amount, stock } = body)
-    const booksSql = "UPDATE books SET stock = ? WHERE id = ?"
+    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, created_at) VALUES (?,?,?,?,?)"
     try {
-        await query(booksSql, id)
-        const logs = await query(logsSql, [id, user_id, status_id, amount])
+        const books = await query(booksSql, [id, bites_util.curr_date])
+        if (books.affectedRows === 0) {
+            respJson(404, null, `No book found with ID ${id}`, null, res);
+        }
+        const logs = await query(logsSql, [id, user_id, status_id, amount, bites_util.curr_date])
         respJson(200, { logs_id: logs.insertId, books_id: book_id }, "Book borrowed successfully", null, res)
     } catch (err) {
         respJson(500, null, "Failed to borrow book", null, res)
@@ -34,11 +37,14 @@ const borrowBooks = async (res, id, body) => {
 //return book logs
 const returnBooks = async (res, id, body) => {
     ({ user_id, status_id, amount, stock } = body)
-    const booksSql = "UPDATE books SET stock = ? WHERE id = ?"
+    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, created_at) VALUES (?,?,?,?,?)"
     try {
-        await query(booksSql, id)
-        const logs = await query(logsSql, [id, user_id, status_id, amount])
+        const books = await query(booksSql, [id, bites_util.curr_date])
+        if (books.affectedRows === 0) {
+            respJson(404, null, `No book found with ID ${id}`, null, res);
+        }
+        const logs = await query(logsSql, [id, user_id, status_id, amount, bites_util.curr_date])
         respJson(200, { logs_id: logs.insertId, books_id: book_id }, "Book borrowed successfully", null, res)
     } catch (err) {
         respJson(500, null, "Failed to borrow book", null, res)

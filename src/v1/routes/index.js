@@ -35,7 +35,7 @@ router.put("/editbooks/:id", (req, res) => {
     updateBooks(res, id, body)
 })
 
-//show logs
+//get library lending log
 router.get("/logs", (req, res) => {
     showLogs(res)
 })
@@ -52,11 +52,6 @@ router.post("/returnbooks/:id", (req, res) => {
     const id = req.params.id
     const body = req.body
     returnBooks(res, id, body)
-})
-
-//get library lending log
-router.get("/logs", (req, res) => {
-    res.send("test")
 })
 
 /**Auth***/
