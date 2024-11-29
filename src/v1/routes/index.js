@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const { showBooks, getBooksbyId, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
+const { showLogs, borrowbooks } = require("../controller/logs-controller")
 
 /**book**/
 //fetch all book data
@@ -34,9 +35,15 @@ router.put("/editbooks/:id", (req, res) => {
     updateBooks(res, id, body)
 })
 
+router.get("/logs", (req, res) => {
+    showLogs(res)
+})
+
 //borrowing book
 router.post("/borrowbooks/:id", (req, res) => {
-    res.send("test")
+    const id = req.params.id
+    const body = req.body
+    borrowbooks(res, id, body)
 })
 
 //return book
