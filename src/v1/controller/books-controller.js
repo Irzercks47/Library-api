@@ -38,7 +38,7 @@ const addBooks = async (res, body) => {
         const data = await query(sql, [book_name, summary, date_published, author, book_cover, stock, bites_util.curr_date]);
         respJson(201, { id: data.insertId }, "Book added successfully", null, res)
     } catch (err) {
-        respJson(404, err, "Failed to add book", null, res)
+        respJson(500, err, "Failed to add book", null, res)
     }
 }
 
