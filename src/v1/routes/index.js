@@ -12,7 +12,6 @@ router.get('/books', (req, res) => {
 //add book
 router.post("/addbooks", (req, res) => {
     const body = req.body
-    // console.log(body)
     addBooks(res, body)
 })
 

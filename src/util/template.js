@@ -12,6 +12,11 @@ const respJson = (status_code, data, status_message, paginate, res) => {
         }
     ])
 }
+
+const paginateTemplate = () => {
+
+}
+
 module.exports = {
     respJson,
 };

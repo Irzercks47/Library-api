@@ -13,7 +13,7 @@ const showBooks = async (res) => {
         const data = await query(sql);
         respJson(200, data, "succes", null, res)
     } catch (err) {
-        respJson(500, null, err, null, res)
+        respJson(500, null, err.message, null, res)
     }
 }
 
@@ -22,10 +22,14 @@ const getBooksbyId = async (res, id) => {
     const sql = `SELECT * FROM books WHERE id = ?`
     try {
         const data = await query(sql, id);
-        if (data.length === 0) respJson(404, null, `Book with ID ${id} not found`, null, res);
-        respJson(200, data, "succes", null, res)
+        if (data.length === 0) {
+            respJson(404, null, `Book with ID ${id} not found`, null, res);
+        }
+        else {
+            respJson(200, data, "succes", null, res)
+        }
     } catch (err) {
-        respJson(404, null, err, null, res)
+        respJson(404, null, err.message, null, res)
     }
 }
 
