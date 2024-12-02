@@ -13,10 +13,14 @@ const respJson = (status_code, data, status_message, paginate, res) => {
     ])
 }
 
-const paginateTemplate = () => {
-
+const paginateTemplate = (page, totalPages) => {
+    return {
+        "current_page": parseInt(page),
+        "total_pages": totalPages,
+    }
 }
 
 module.exports = {
     respJson,
+    paginateTemplate,
 };

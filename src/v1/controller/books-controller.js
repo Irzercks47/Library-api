@@ -1,17 +1,21 @@
 const db = require('../db/connection')
 const { respJson } = require("../../util/template")
-const { bites_util } = require("../../util/utilFunction")
+const { bites_util, paginate } = require("../../util/utilFunction")
 const util = require('util');
 
-//promisify db query o that we can imporve readability and make error handling easier
+//promisify db query so that we can improve readability and make error handling easier
 const query = util.promisify(db.query).bind(db);
 
 //get all books
-const showBooks = async (res) => {
-    const sql = "SELECT * FROM books"
+const showBooks = async (res, params) => {
+    const { page = 1, limit = 10 } = params
+    const offset = (page - 1) * limit
+    const sql = "SELECT * FROM books LIMIT ? OFFSET ?"
+    const countSql = `SELECT COUNT(id) AS total FROM books`
     try {
-        const data = await query(sql);
-        respJson(200, data, "succes", null, res)
+        const data = await query(sql, [parseInt(limit), parseInt(offset)]);
+        const pagination = await paginate(query, countSql, limit, page)
+        respJson(200, data, "succes", pagination, res)
     } catch (err) {
         respJson(500, null, err.message, null, res)
     }
@@ -35,7 +39,7 @@ const getBooksbyId = async (res, id) => {
 
 //add books
 const addBooks = async (res, body) => {
-    ({ book_name, summary, date_published, author, book_cover, stock } = body)
+    const { book_name, summary, date_published, author, book_cover, stock } = body
     const sql = `INSERT INTO books (book_name, summary, date_published, author, book_cover, stock, created_at) VALUES
         (?, ?, ?, ?, ?, ?, ?)`
     try {
@@ -48,7 +52,7 @@ const addBooks = async (res, body) => {
 
 //update book
 const updateBooks = async (res, id, body) => {
-    ({ book_name, summary, date_published, author, book_cover, stock } = body)
+    const { book_name, summary, date_published, author, book_cover, stock } = body
     const sql = `UPDATE books SET book_name = ?, summary = ?, date_published = ?, 
         author = ?, book_cover = ?, stock = ?, updated_at = ? WHERE id = ?`
     try {

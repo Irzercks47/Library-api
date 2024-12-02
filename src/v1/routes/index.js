@@ -6,13 +6,14 @@ const { showLogs, borrowBooks, returnBooks } = require("../controller/logs-contr
 /**book**/
 //fetch all book data
 router.get('/books', (req, res) => {
-    showBooks(res)
+    const params = req.query
+    showBooks(res, params)
 })
 
 //add book
 router.post("/addbooks", (req, res) => {
     const body = req.body
-    addBooks(res, body)
+    addBooks(res, body,)
 })
 
 //fetch detailed book data
@@ -36,7 +37,8 @@ router.put("/editbooks/:id", (req, res) => {
 
 //get library lending log
 router.get("/logs", (req, res) => {
-    showLogs(res)
+    const params = req.query
+    showLogs(res, params)
 })
 
 //record borrowing book
