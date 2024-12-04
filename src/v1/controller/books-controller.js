@@ -8,11 +8,11 @@ const query = util.promisify(db.query).bind(db);
 
 //get all books
 const showBooks = async (res, params) => {
-    let { page = 1, limit = 10 } = params
+    let { page, limit } = params
     //this approach prevents if the data sent is Nan or null by converting it to int and replacing it
-    page = Math.max(parseInt(page, 10) || 1);
-    limit = Math.max(parseInt(limit, 10) || 10);
-    const offset = (page - 1) * limit
+    page = bites_util.page(page)
+    limit = bites_util.limit(limit)
+    const offset = bites_util.offset(page, limit)
     const sql = "SELECT * FROM books LIMIT ? OFFSET ?"
     const countSql = `SELECT COUNT(id) AS total FROM books`
     try {
@@ -50,11 +50,16 @@ const getBooksbyId = async (res, id) => {
 
 //search books
 const searchBooks = async (res, params) => {
-    let searchQuery = search.replace("&", " ")
-    const sql = `SELECT * FROM books WHERE id = ?`
+    let { search, page, limit } = params
+    page = bites_util.page(page)
+    limit = bites_util.limit(limit)
+    const sql = `SELECT * FROM books WHERE book_name = % ? %`
     try {
-        const datas = await query()
+        const datas = await query(sql, [search])
+        const pagination = await paginate(query, countSql, limit, page)
+        respJson(200, data, "succes", null, res)
     } catch (err) {
+        respJson(404, null, err.message || "an eror occured", null, res)
     }
 }
 
@@ -108,6 +113,7 @@ const deleteBooks = async (res, id) => {
 module.exports = {
     showBooks,
     getBooksbyId,
+    searchBooks,
     addBooks,
     updateBooks,
     deleteBooks,

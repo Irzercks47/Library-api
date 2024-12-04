@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const { showBooks, getBooksbyId, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
+const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
 const { showLogs, getLogsbyId, borrowBooks, returnBooks } = require("../controller/logs-controller")
 
 /**book**/
@@ -8,6 +8,12 @@ const { showLogs, getLogsbyId, borrowBooks, returnBooks } = require("../controll
 router.get('/books', (req, res) => {
     const params = req.query
     showBooks(res, params)
+})
+
+//search book data
+router.get('/searchBooks', (req, res) => {
+    const params = req.query
+    searchBooks(res, params)
 })
 
 //add book
@@ -18,12 +24,6 @@ router.post("/addbooks", (req, res) => {
 
 //fetch detailed book data
 router.get("/books/:id", (req, res) => {
-    const id = req.params.id
-    getBooksbyId(res, id)
-})
-
-//search book data
-router.get("/books", (req, res) => {
     const id = req.params.id
     getBooksbyId(res, id)
 })
