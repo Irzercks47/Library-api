@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
-const { showLogs, getLogsbyId, borrowBooks, returnBooks } = require("../controller/logs-controller")
+const { showLogs, getLogsbyId, searchLogsbyUserId, borrowBooks, returnBooks } = require("../controller/logs-controller")
 
 /**book**/
 //fetch all book data
@@ -41,16 +41,26 @@ router.put("/editbooks/:id", (req, res) => {
     updateBooks(res, id, body)
 })
 
+/**logs**/
+
+//get library lending log
+router.get("/logs", (req, res) => {
+    const params = req.query
+    showLogs(res, params)
+})
+
 //fetch detailed lending log
 router.get("/logs/:id", (req, res) => {
     const id = req.params.id
     getLogsbyId(res, id)
 })
 
-//get library lending log
-router.get("/logs", (req, res) => {
+//search lending log by user_id
+router.get("/searchLogs/:user_id", (req, res) => {
+    const user_id = req.params.user_id
+    console.log(user_id)
     const params = req.query
-    showLogs(res, params)
+    searchLogsbyUserId(res, user_id, params)
 })
 
 //record borrowing book

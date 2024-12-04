@@ -8,15 +8,13 @@ const bites_util = {
     intParse: (stock) => parseInt(stock, 10)
 }
 
-const paginate = async (query, countSql, limit, page) => {
+const paginate = async (query, countSql, sqlParams, limit, page) => {
     try {
         // Get the total number of logs
-        const totalResult = await query(countSql);
+        const totalResult = await query(countSql, sqlParams);
         const total = totalResult[0].total;
-
         // Calculate pagination metadata
         const totalPages = Math.ceil(total / limit);
-        // console.log(paginateTemplate(page, limit, totalPages, total))
         return paginateTemplate(page, totalPages)
     } catch (err) {
         return null

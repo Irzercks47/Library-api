@@ -25,7 +25,7 @@ const showBooks = async (res, params) => {
         */
         //but using this without promise all can take away user time so the use of it depends on the machine
         const data = await query(sql, [limit, offset]);
-        const pagination = await paginate(query, countSql, limit, page)
+        const pagination = await paginate(query, countSql, null, limit, page)
         respJson(200, data, "succes", pagination, res)
     } catch (err) {
         respJson(500, null, err.message || "an eror occured", null, res)
@@ -36,13 +36,12 @@ const showBooks = async (res, params) => {
 const getBooksbyId = async (res, id) => {
     const sql = `SELECT * FROM books WHERE id = ?`
     try {
-        const data = await query(sql, id);
-        if (data.length === 0) {
-            respJson(404, null, `Book with ID ${id} not found`, null, res);
+        const datas = await query(sql, id);
+        if (datas.length === 0) {
+            respJson(404, null, `Book with ID ${id} not found`, null, res)
+            return
         }
-        else {
-            respJson(200, data, "succes", null, res)
-        }
+        respJson(200, data, "succes", null, res)
     } catch (err) {
         respJson(404, null, err.message || "an eror occured", null, res)
     }
@@ -53,13 +52,20 @@ const searchBooks = async (res, params) => {
     let { search, page, limit } = params
     page = bites_util.page(page)
     limit = bites_util.limit(limit)
-    const sql = `SELECT * FROM books WHERE book_name = % ? %`
+    const offset = bites_util.offset(page, limit)
+    const sql = `SELECT * FROM books WHERE book_name LIKE ? LIMIT ? OFFSET ?`
+    const countSql = `SELECT COUNT(*) AS total FROM books WHERE book_name LIKE ?`
+    const countSqlParams = `%${search}%`
     try {
-        const datas = await query(sql, [search])
-        const pagination = await paginate(query, countSql, limit, page)
+        const datas = await query(sql, [`%${search}%`, limit, offset])
+        const pagination = await paginate(query, countSql, countSqlParams, limit, page)
+        if (datas.length === 0) {
+            respJson(404, null, `Book with name ${search} not found`, null, res);
+            return;
+        }
         respJson(200, datas, "succes", pagination, res)
     } catch (err) {
-        respJson(404, null, err.message || "an eror occured", null, res)
+        respJson(500, null, err.message || "an eror occured", null, res)
     }
 }
 
@@ -87,9 +93,9 @@ const updateBooks = async (res, id, body) => {
         const data = await query(sql, [book_name, summary, date_published, author, book_cover, stock, bites_util.curr_date, id]);
         if (data.affectedRows === 0) {
             respJson(404, null, `No book found with ID ${id}`, null, res);
-        } else {
-            respJson(201, { id, updated: true }, "Book updated successfully", null, res)
+            return
         }
+        respJson(201, { id, updated: true }, "Book updated successfully", null, res)
     } catch (err) {
         respJson(500, null, "Failed to update book", null, res)
     }
@@ -101,10 +107,10 @@ const deleteBooks = async (res, id) => {
     try {
         const data = await query(sql, id);
         if (data.affectedRows === 0) {
-            respJson(404, null, `No book found with ID ${id}`, null, res);
-        } else {
-            respJson(201, { id, deleted: true }, "Book deleted successfully", null, res)
+            respJson(404, null, `No book found with ID ${id}`, null, res)
+            return
         }
+        respJson(201, { id, deleted: true }, "Book deleted successfully", null, res)
     } catch (err) {
         respJson(500, null, "Failed to delete book", null, res)
     }
