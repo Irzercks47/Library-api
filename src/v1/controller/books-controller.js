@@ -8,16 +8,27 @@ const query = util.promisify(db.query).bind(db);
 
 //get all books
 const showBooks = async (res, params) => {
-    const { page = 1, limit = 10 } = params
+    let { page = 1, limit = 10 } = params
+    //this approach prevents if the data sent is Nan or null by converting it to int and replacing it
+    page = Math.max(parseInt(page, 10) || 1);
+    limit = Math.max(parseInt(limit, 10) || 10);
     const offset = (page - 1) * limit
     const sql = "SELECT * FROM books LIMIT ? OFFSET ?"
     const countSql = `SELECT COUNT(id) AS total FROM books`
     try {
-        const data = await query(sql, [parseInt(limit), parseInt(offset)]);
+        //you can use promise all for this but the loads in system is bigger
+        /*
+            const [data, pagination] = await Promise.all([
+                query(sql, [limit, offset]),
+                paginate(query, countSql, limit, page),
+            ]);        
+        */
+        //but using this without promise all can take away user time so the use of it depends on the machine
+        const data = await query(sql, [limit, offset]);
         const pagination = await paginate(query, countSql, limit, page)
         respJson(200, data, "succes", pagination, res)
     } catch (err) {
-        respJson(500, null, err.message, null, res)
+        respJson(500, null, err.message || "an eror occured", null, res)
     }
 }
 
@@ -33,13 +44,24 @@ const getBooksbyId = async (res, id) => {
             respJson(200, data, "succes", null, res)
         }
     } catch (err) {
-        respJson(404, null, err.message, null, res)
+        respJson(404, null, err.message || "an eror occured", null, res)
+    }
+}
+
+//search books
+const searchBooks = async (res, params) => {
+    let searchQuery = search.replace("&", " ")
+    const sql = `SELECT * FROM books WHERE id = ?`
+    try {
+        const datas = await query()
+    } catch (err) {
     }
 }
 
 //add books
 const addBooks = async (res, body) => {
-    const { book_name, summary, date_published, author, book_cover, stock } = body
+    let { book_name, summary, date_published, author, book_cover, stock } = body
+    stock = parseInt(stock, 10) || 0
     const sql = `INSERT INTO books (book_name, summary, date_published, author, book_cover, stock, created_at) VALUES
         (?, ?, ?, ?, ?, ?, ?)`
     try {
@@ -52,7 +74,8 @@ const addBooks = async (res, body) => {
 
 //update book
 const updateBooks = async (res, id, body) => {
-    const { book_name, summary, date_published, author, book_cover, stock } = body
+    let { book_name, summary, date_published, author, book_cover, stock } = body
+    stock = parseInt(stock, 10) || 0
     const sql = `UPDATE books SET book_name = ?, summary = ?, date_published = ?, 
         author = ?, book_cover = ?, stock = ?, updated_at = ? WHERE id = ?`
     try {

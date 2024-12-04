@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const { showBooks, getBooksbyId, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
-const { showLogs, borrowBooks, returnBooks } = require("../controller/logs-controller")
+const { showLogs, getLogsbyId, borrowBooks, returnBooks } = require("../controller/logs-controller")
 
 /**book**/
 //fetch all book data
@@ -22,6 +22,12 @@ router.get("/books/:id", (req, res) => {
     getBooksbyId(res, id)
 })
 
+//search book data
+router.get("/books", (req, res) => {
+    const id = req.params.id
+    getBooksbyId(res, id)
+})
+
 //delete book data
 router.delete("/deletebooks/:id", (req, res) => {
     const id = req.params.id
@@ -33,6 +39,12 @@ router.put("/editbooks/:id", (req, res) => {
     const id = req.params.id
     const body = req.body
     updateBooks(res, id, body)
+})
+
+//fetch detailed lending log
+router.get("/logs/:id", (req, res) => {
+    const id = req.params.id
+    getLogsbyId(res, id)
 })
 
 //get library lending log

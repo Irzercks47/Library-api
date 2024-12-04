@@ -28,6 +28,27 @@ const showLogs = async (res, params) => {
     }
 }
 
+//get logs by id
+const getLogsbyId = async (res, id) => {
+    const sql = `SELECT ll.id, b.book_name, u.username, s.status_name, ll.amount, ll.created_at, ll.updated_at 
+                FROM librarylogs AS ll
+                JOIN users AS u ON ll.user_id = u.id
+                JOIN books AS b ON ll.book_id = b.id
+                JOIN statuses AS s ON ll.status_id = s.id
+                WHERE ll.id = ?`
+    try {
+        const data = await query(sql, id);
+        if (data.length === 0) {
+            respJson(404, null, `Log with ID ${id} not found`, null, res);
+        }
+        else {
+            respJson(200, data, "succes", null, res)
+        }
+    } catch (err) {
+        respJson(404, null, err.message, null, res)
+    }
+}
+
 //borrow book logs
 const borrowBooks = async (res, id, body) => {
     const { user_id, status_id, amount, stock } = body
@@ -66,6 +87,7 @@ const returnBooks = async (res, id, body) => {
 
 module.exports = {
     showLogs,
+    getLogsbyId,
     borrowBooks,
     returnBooks,
 }
