@@ -57,7 +57,7 @@ const searchBooks = async (res, params) => {
     try {
         const datas = await query(sql, [search])
         const pagination = await paginate(query, countSql, limit, page)
-        respJson(200, data, "succes", null, res)
+        respJson(200, datas, "succes", pagination, res)
     } catch (err) {
         respJson(404, null, err.message || "an eror occured", null, res)
     }
@@ -66,7 +66,7 @@ const searchBooks = async (res, params) => {
 //add books
 const addBooks = async (res, body) => {
     let { book_name, summary, date_published, author, book_cover, stock } = body
-    stock = parseInt(stock, 10) || 0
+    stock = bites_util.intParse(stock)
     const sql = `INSERT INTO books (book_name, summary, date_published, author, book_cover, stock, created_at) VALUES
         (?, ?, ?, ?, ?, ?, ?)`
     try {
@@ -80,7 +80,7 @@ const addBooks = async (res, body) => {
 //update book
 const updateBooks = async (res, id, body) => {
     let { book_name, summary, date_published, author, book_cover, stock } = body
-    stock = parseInt(stock, 10) || 0
+    stock = bites_util.intParse(stock)
     const sql = `UPDATE books SET book_name = ?, summary = ?, date_published = ?, 
         author = ?, book_cover = ?, stock = ?, updated_at = ? WHERE id = ?`
     try {
