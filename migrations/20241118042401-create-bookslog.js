@@ -43,6 +43,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      note: {
+        allowNull: true,
+        type: Sequelize.TEXT
+      },
       is_deleted: {
         allowNull: false,
         type: Sequelize.BOOLEAN

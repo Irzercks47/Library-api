@@ -86,9 +86,9 @@ const searchLogsbyUserId = async (res, user_id, params) => {
 //borrow book logs
 //needs to be fixed
 const borrowBooks = async (res, id, body) => {
-    const { user_id, status_id, amount, stock } = body
+    const { user_id, status_id, amount, stock, note } = body
     const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND stock >= ? AND is_deleted = ?"
-    const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, created_at) VALUES (?,?,?,?,?)"
+    const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, note, created_at) VALUES (?,?,?,?,?,?)"
     try {
         const books = await query(booksSql, [stock, bites_util.curr_date, id, amount])
         if (books.affectedRows === 0) {
@@ -104,10 +104,11 @@ const borrowBooks = async (res, id, body) => {
 }
 
 //return book logs
+//needs to be fixed
 const returnBooks = async (res, id, body) => {
     const { user_id, status_id, amount, stock } = body
     const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND is_deleted = ?"
-    const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, created_at) VALUES (?,?,?,?,?)"
+    const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, note,amount, created_at) VALUES (?,?,?,?,?,?)"
     try {
         const books = await query(booksSql, [stock, bites_util.curr_date, id, showData])
         if (books.affectedRows === 0) {
