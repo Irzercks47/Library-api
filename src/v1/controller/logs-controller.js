@@ -5,6 +5,8 @@ const util = require('util');
 
 //promisify db query so that we can improve readability and make error handling easier
 const query = util.promisify(db.query).bind(db);
+const showData = false
+const hideData = true
 
 //show logs
 //joins from books, user, and status
@@ -19,11 +21,12 @@ const showLogs = async (res, params) => {
                 JOIN books AS b ON ll.book_id = b.id
                 JOIN statuses AS s ON ll.status_id = s.id
                 ORDER BY ll.created_at DESC
+                WHERE is_deleted ?
                 LIMIT ? OFFSET ?`
-    const countSql = `SELECT COUNT(id) AS total from librarylogs`
+    const countSql = `SELECT COUNT(id) AS total from librarylogs WHERE is_deleted = ?`
     try {
-        const data = await query(sql, [limit, offset])
-        const pagination = await paginate(query, countSql, null, limit, page)
+        const data = await query(sql, [showData, limit, offset])
+        const pagination = await paginate(query, countSql, showData, limit, page)
         respJson(200, data, "succes", pagination, res)
     } catch (err) {
         respJson(500, null, err.message, null, res)
@@ -37,9 +40,9 @@ const getLogsbyId = async (res, id) => {
                 JOIN users AS u ON ll.user_id = u.id
                 JOIN books AS b ON ll.book_id = b.id
                 JOIN statuses AS s ON ll.status_id = s.id
-                WHERE ll.id = ?`
+                WHERE ll.id = ? AND is_deleted ?`
     try {
-        const data = await query(sql, id);
+        const data = await query(sql, [id, showData]);
         if (data.length === 0) {
             respJson(404, null, `Log with ID ${id} not found`, null, res);
         }
@@ -62,12 +65,12 @@ const searchLogsbyUserId = async (res, user_id, params) => {
                 JOIN users AS u ON ll.user_id = u.id
                 JOIN books AS b ON ll.book_id = b.id
                 JOIN statuses AS s ON ll.status_id = s.id
-                WHERE ll.user_id = ? 
+                WHERE ll.user_id = ? AND is_deleted = ?
                 ORDER BY ll.created_at DESC
                 LIMIT ? OFFSET ?`
     const countSql = `SELECT COUNT(id) AS total from librarylogs WHERE user_id = ?`
     try {
-        const data = await query(sql, [user_id, limit, offset]);
+        const data = await query(sql, [user_id, showData, limit, offset]);
         const pagination = await paginate(query, countSql, user_id, limit, page)
         if (data.length === 0) {
             respJson(404, null, `Log with ID ${user_id} not found`, null, res);
@@ -81,9 +84,10 @@ const searchLogsbyUserId = async (res, user_id, params) => {
 }
 
 //borrow book logs
+//needs to be fixed
 const borrowBooks = async (res, id, body) => {
     const { user_id, status_id, amount, stock } = body
-    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND stock >= ?"
+    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND stock >= ? AND is_deleted = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, created_at) VALUES (?,?,?,?,?)"
     try {
         const books = await query(booksSql, [stock, bites_util.curr_date, id, amount])
@@ -102,10 +106,10 @@ const borrowBooks = async (res, id, body) => {
 //return book logs
 const returnBooks = async (res, id, body) => {
     const { user_id, status_id, amount, stock } = body
-    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ?"
+    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND is_deleted = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, created_at) VALUES (?,?,?,?,?)"
     try {
-        const books = await query(booksSql, [stock, bites_util.curr_date, id])
+        const books = await query(booksSql, [stock, bites_util.curr_date, id, showData])
         if (books.affectedRows === 0) {
             respJson(404, null, `No book found with ID ${id}`, null, res);
         }
