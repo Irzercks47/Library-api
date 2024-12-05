@@ -13,35 +13,39 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model:"books",
-          key:"id",
+          model: "books",
+          key: "id",
         },
-        onDelete:"CASCADE",
-        onUpdate:"CASCADE",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model:"users",
-          key:"id",
+          model: "users",
+          key: "id",
         },
-        onDelete:"CASCADE",
-        onUpdate:"CASCADE",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       status_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model:"statuses",
-          key:"id",
+          model: "statuses",
+          key: "id",
         },
-        onDelete:"CASCADE",
-        onUpdate:"CASCADE",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       amount: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      is_deleted: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
       },
       created_at: {
         allowNull: false,
@@ -50,7 +54,11 @@ module.exports = {
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      deleted_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
     });
     await queryInterface.addIndex("librarylogs", ["book_id"]);
     await queryInterface.addIndex("librarylogs", ["user_id"]);

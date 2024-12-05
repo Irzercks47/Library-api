@@ -29,6 +29,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      is_deleted: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -36,7 +40,11 @@ module.exports = {
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-      }
+      },
+      deleted_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
     });
   },
   async down(queryInterface, Sequelize) {

@@ -10,8 +10,10 @@ module.exports = {
         author: "Harper Lee",
         book_cover: "https://example.com/to-kill-a-mockingbird.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "1984",
@@ -20,8 +22,10 @@ module.exports = {
         author: "George Orwell",
         book_cover: "https://example.com/1984.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Pride and Prejudice",
@@ -30,8 +34,10 @@ module.exports = {
         author: "Jane Austen",
         book_cover: "https://example.com/pride-and-prejudice.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Great Gatsby",
@@ -40,8 +46,10 @@ module.exports = {
         author: "F. Scott Fitzgerald",
         book_cover: "https://example.com/the-great-gatsby.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Moby Dick",
@@ -50,8 +58,10 @@ module.exports = {
         author: "Herman Melville",
         book_cover: "https://example.com/moby-dick.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Catcher in the Rye",
@@ -60,8 +70,10 @@ module.exports = {
         author: "J.D. Salinger",
         book_cover: "https://example.com/the-catcher-in-the-rye.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Hobbit",
@@ -70,8 +82,10 @@ module.exports = {
         author: "J.R.R. Tolkien",
         book_cover: "https://example.com/the-hobbit.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Fahrenheit 451",
@@ -80,8 +94,10 @@ module.exports = {
         author: "Ray Bradbury",
         book_cover: "https://example.com/fahrenheit-451.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Jane Eyre",
@@ -90,8 +106,10 @@ module.exports = {
         author: "Charlotte Brontë",
         book_cover: "https://example.com/jane-eyre.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Brave New World",
@@ -100,8 +118,10 @@ module.exports = {
         author: "Aldous Huxley",
         book_cover: "https://example.com/brave-new-world.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Wuthering Heights",
@@ -110,8 +130,10 @@ module.exports = {
         author: "Emily Brontë",
         book_cover: "https://example.com/wuthering-heights.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Alchemist",
@@ -120,8 +142,10 @@ module.exports = {
         author: "Paulo Coelho",
         book_cover: "https://example.com/the-alchemist.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Crime and Punishment",
@@ -130,8 +154,10 @@ module.exports = {
         author: "Fyodor Dostoevsky",
         book_cover: "https://example.com/crime-and-punishment.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "War and Peace",
@@ -140,8 +166,10 @@ module.exports = {
         author: "Leo Tolstoy",
         book_cover: "https://example.com/war-and-peace.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Picture of Dorian Gray",
@@ -150,8 +178,10 @@ module.exports = {
         author: "Oscar Wilde",
         book_cover: "https://example.com/the-picture-of-dorian-gray.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Animal Farm",
@@ -160,8 +190,10 @@ module.exports = {
         author: "George Orwell",
         book_cover: "https://example.com/animal-farm.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Road",
@@ -170,8 +202,10 @@ module.exports = {
         author: "Cormac McCarthy",
         book_cover: "https://example.com/the-road.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Dracula",
@@ -180,8 +214,10 @@ module.exports = {
         author: "Bram Stoker",
         book_cover: "https://example.com/dracula.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Divine Comedy",
@@ -190,8 +226,10 @@ module.exports = {
         author: "Dante Alighieri",
         book_cover: "https://example.com/the-divine-comedy.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Frankenstein",
@@ -200,8 +238,10 @@ module.exports = {
         author: "Mary Shelley",
         book_cover: "https://example.com/frankenstein.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Fault in Our Stars",
@@ -210,8 +250,10 @@ module.exports = {
         author: "John Green",
         book_cover: "https://example.com/the-fault-in-our-stars.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Percy Jackson & The Olympians: The Lightning Thief",
@@ -220,8 +262,10 @@ module.exports = {
         author: "Rick Riordan",
         book_cover: "https://example.com/percy-jackson.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Maze Runner",
@@ -230,8 +274,10 @@ module.exports = {
         author: "James Dashner",
         book_cover: "https://example.com/the-maze-runner.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Hunger Games",
@@ -240,8 +286,10 @@ module.exports = {
         author: "Suzanne Collins",
         book_cover: "https://example.com/the-hunger-games.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Divergent",
@@ -250,8 +298,10 @@ module.exports = {
         author: "Veronica Roth",
         book_cover: "https://example.com/divergent.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Book Thief",
@@ -260,8 +310,10 @@ module.exports = {
         author: "Markus Zusak",
         book_cover: "https://example.com/the-book-thief.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Giver",
@@ -270,8 +322,10 @@ module.exports = {
         author: "Lois Lowry",
         book_cover: "https://example.com/the-giver.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Twilight",
@@ -280,8 +334,10 @@ module.exports = {
         author: "Stephenie Meyer",
         book_cover: "https://example.com/twilight.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "A Game of Thrones",
@@ -290,8 +346,10 @@ module.exports = {
         author: "George R.R. Martin",
         book_cover: "https://example.com/a-game-of-thrones.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Name of the Wind",
@@ -300,8 +358,10 @@ module.exports = {
         author: "Patrick Rothfuss",
         book_cover: "https://example.com/the-name-of-the-wind.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Eragon",
@@ -310,8 +370,10 @@ module.exports = {
         author: "Christopher Paolini",
         book_cover: "https://example.com/eragon.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Lord of the Rings: The Fellowship of the Ring",
@@ -320,8 +382,10 @@ module.exports = {
         author: "J.R.R. Tolkien",
         book_cover: "https://example.com/the-fellowship-of-the-ring.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Golden Compass",
@@ -330,8 +394,10 @@ module.exports = {
         author: "Philip Pullman",
         book_cover: "https://example.com/the-golden-compass.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Artemis Fowl",
@@ -340,8 +406,10 @@ module.exports = {
         author: "Eoin Colfer",
         book_cover: "https://example.com/artemis-fowl.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Shadow of the Wind",
@@ -350,8 +418,10 @@ module.exports = {
         author: "Carlos Ruiz Zafón",
         book_cover: "https://example.com/the-shadow-of-the-wind.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Life of Pi",
@@ -360,8 +430,10 @@ module.exports = {
         author: "Yann Martel",
         book_cover: "https://example.com/life-of-pi.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Fault in Our Stars",
@@ -370,8 +442,10 @@ module.exports = {
         author: "John Green",
         book_cover: "https://example.com/the-fault-in-our-stars.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "Percy Jackson & The Olympians: The Lightning Thief",
@@ -380,8 +454,10 @@ module.exports = {
         author: "Rick Riordan",
         book_cover: "https://example.com/percy-jackson.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Lord of the Rings: The Fellowship of the Ring",
@@ -390,8 +466,10 @@ module.exports = {
         author: "J.R.R. Tolkien",
         book_cover: "https://example.com/the-fellowship-of-the-ring.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
       {
         book_name: "The Golden Compass",
@@ -400,8 +478,10 @@ module.exports = {
         author: "Philip Pullman",
         book_cover: "https://example.com/the-golden-compass.jpg",
         stock: 10,
+        is_deleted: false,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        deleted_at: '0000-00-00',
       },
     ]);
   },
