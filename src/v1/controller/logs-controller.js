@@ -2,6 +2,7 @@ const db = require('../db/connection')
 const { respJson } = require("../../util/template")
 const { bites_util, paginate } = require("../../util/utilFunction")
 const util = require('util');
+const mysql = require('mysql')
 
 //promisify db query so that we can improve readability and make error handling easier
 const query = util.promisify(db.query).bind(db);
@@ -84,40 +85,45 @@ const searchLogsbyUserId = async (res, user_id, params) => {
 }
 
 //borrow book logs
-//needs to be fixed
 const borrowBooks = async (res, id, body) => {
-    const { user_id, status_id, amount, stock, note } = body
+    const { user_id, amount, final_stock, note } = body
+    const status_id = 1
     const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND stock >= ? AND is_deleted = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, note, created_at) VALUES (?,?,?,?,?,?)"
     try {
-        const books = await query(booksSql, [stock, bites_util.curr_date, id, amount])
+        // console.log(mysql.format(booksSql, [final_stock, bites_util.curr_date, id, amount, showData]));
+        const books = await query(booksSql, [final_stock, bites_util.curr_date, id, amount, showData])
+        console.log(books)
         if (books.affectedRows === 0) {
             respJson(404, null, `No book found with ID ${id}`, null, res);
+            return;
         }
-        else {
-            const logs = await query(logsSql, [id, user_id, status_id, amount, bites_util.curr_date])
-            respJson(200, { logs_id: logs.insertId, books_id: book_id }, "Book borrowed successfully", null, res)
-        }
+        const logs = await query(logsSql, [id, user_id, status_id, amount, note, bites_util.curr_date])
+        respJson(200, { logs_id: logs.insertId, books_id: id }, "Book borrowed successfully", null, res)
     } catch (err) {
         respJson(500, null, "Failed to borrow book", null, res)
     }
 }
 
 //return book logs
-//needs to be fixed
+//needs to be revised
 const returnBooks = async (res, id, body) => {
-    const { user_id, status_id, amount, stock } = body
-    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND is_deleted = ?"
-    const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, note,amount, created_at) VALUES (?,?,?,?,?,?)"
+    const { user_id, amount, final_stock, note } = body
+    const status_id = 2
+    const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND stock >= ? AND is_deleted = ?"
+    const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, note, created_at) VALUES (?,?,?,?,?,?)"
     try {
-        const books = await query(booksSql, [stock, bites_util.curr_date, id, showData])
+        // console.log(mysql.format(booksSql, [final_stock, bites_util.curr_date, id, amount, showData]));
+        const books = await query(booksSql, [final_stock, bites_util.curr_date, id, amount, showData])
+        console.log(books)
         if (books.affectedRows === 0) {
             respJson(404, null, `No book found with ID ${id}`, null, res);
+            return;
         }
-        const logs = await query(logsSql, [id, user_id, status_id, amount, bites_util.curr_date])
-        respJson(200, { logs_id: logs.insertId, books_id: book_id }, "Book borrowed successfully", null, res)
+        const logs = await query(logsSql, [id, user_id, status_id, amount, note, bites_util.curr_date])
+        respJson(200, { logs_id: logs.insertId, books_id: id }, "Book borrowed successfully", null, res)
     } catch (err) {
-        respJson(500, null, "Failed to borrow book", null, res)
+        respJson(500, null, "Failed to return book", null, res)
     }
 }
 

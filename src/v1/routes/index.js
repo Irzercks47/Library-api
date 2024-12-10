@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
+const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks, calcAmount } = require("../controller/books-controller")
 const { showLogs, getLogsbyId, searchLogsbyUserId, borrowBooks, returnBooks } = require("../controller/logs-controller")
 
 /**book**/
@@ -39,6 +39,12 @@ router.put("/editbooks/:id", (req, res) => {
     const id = req.params.id
     const body = req.body
     updateBooks(res, id, body)
+})
+
+//calculate amount
+router.post("/calculate-amount", (req, res) => {
+    const body = req.body
+    calcAmount(res, body)
 })
 
 /**logs**/
