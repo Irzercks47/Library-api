@@ -1,7 +1,8 @@
 const express = require("express")
 const router = express.Router();
-const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks, calcAmount } = require("../controller/books-controller")
+const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
 const { showLogs, getLogsbyId, searchLogsbyUserId, borrowBooks, returnBooks } = require("../controller/logs-controller")
+const { calcBorrowedAmount } = require("../controller/calculate-controller")
 
 /**book**/
 //fetch all book data
@@ -41,10 +42,17 @@ router.put("/editbooks/:id", (req, res) => {
     updateBooks(res, id, body)
 })
 
-//calculate amount
-router.post("/calculate-amount", (req, res) => {
+/** calculate **/
+//calculate borrowed amount
+router.post("/calculate/borrowed-amount", (req, res) => {
     const body = req.body
-    calcAmount(res, body)
+    calcBorrowedAmount(res, body)
+})
+
+//calculate returned amount
+router.post("/calculate/returned-amount", (req, res) => {
+    const body = req.body
+    calcBorrowedAmount(res, body)
 })
 
 /**logs**/
@@ -70,22 +78,21 @@ router.get("/searchLogs/:user_id", (req, res) => {
 })
 
 //record borrowing book
-router.post("/borrowbooks/:id", (req, res) => {
-    const id = req.params.id
+router.post("/borrowbooks", (req, res) => {
     const body = req.body
-    borrowBooks(res, id, body)
+    borrowBooks(res, body)
 })
 
 //record returning book
-router.post("/returnbooks/:id", (req, res) => {
-    const id = req.params.id
+router.post("/returnbooks", (req, res) => {
     const body = req.body
-    returnBooks(res, id, body)
+    returnBooks(res, body)
 })
 
 /**Auth***/
 //register
 //login
+//logout
 
 
 /**service**/
