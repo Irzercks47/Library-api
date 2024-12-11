@@ -15,7 +15,7 @@ const hideData = true
 //show logs
 //joins from books, user, and status
 const showLogs = async (res, params) => {
-    const { page, limit } = params
+    let { page, limit } = params
     page = bites_util.page(page)
     limit = bites_util.limit(limit)
     const offset = bites_util.offset(page, limit)

@@ -72,7 +72,6 @@ router.get("/logs/:id", (req, res) => {
 //search lending log by user_id
 router.get("/searchLogs/:user_id", (req, res) => {
     const user_id = req.params.user_id
-    console.log(user_id)
     const params = req.query
     searchLogsbyUserId(res, user_id, params)
 })
