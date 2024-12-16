@@ -90,6 +90,10 @@ router.post("/returnbooks", (req, res) => {
 
 /**Auth***/
 //register
+router.post("/register", (req, res) => {
+    const body = req.body
+    returnBooks(res, body)
+})
 //login
 //logout
 
