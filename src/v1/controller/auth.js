@@ -3,6 +3,7 @@ const { respJson } = require("../../util/template")
 const { bites_util, paginate } = require("../../util/utilFunction")
 const util = require('util');
 const bcrypt = require('bcryptjs')
+const CONFIG = require('../../../config')
 // const mysql = require('mysql')
 
 //promisify db query so that we can improve readability and make error handling easier
@@ -33,7 +34,10 @@ const login = async (body, res) => {
         return;
     }
     const cipherPass = bcrypt.hashSync(password, 10)
-    const sql = `SELECT id, username FROM users WHERE username = ? AND password = ?`
+    const sql = `SELECT u.id, u.username, r.role_name
+                FROM users AS u
+                JOIN roles as r ON u.role_id = r.id
+                WHERE username = ? AND password = ?`
     // Filter user from the users array by username and password
     try {
         const data = query(sql, [email, cipherPass]);
@@ -41,7 +45,7 @@ const login = async (body, res) => {
             respJson(404, null, `Username or password incorrect`, null, res);
             return;
         }
-        const accessToken = jwt.sign({ username: user.username, role: user.role }, accessTokenSecret);
+        const accessToken = jwt.sign({ id: data[0].id, username: data[0].username, role: data[0].role }, CONFIG.SECRET_TOKEN);
         respJson(201, accessToken, "Login success", null, res)
 
     } catch (err) {
