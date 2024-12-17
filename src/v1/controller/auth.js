@@ -39,8 +39,8 @@ const login = async (body, res) => {
         respJson(400, null, "Please enter email and password", null, res)
         return;
     }
-    console.log(password)
-    console.log(email)
+    // console.log(password)
+    // console.log(email)
     const sql = `SELECT u.id, u.username, u.password, r.role_name
                 FROM users AS u
                 JOIN roles as r ON u.role_id = r.id
@@ -48,8 +48,8 @@ const login = async (body, res) => {
     // Filter user from the users array by username and password
     try {
         const data = await query(sql, [email]);
-        console.log("SQL Query:", mysql.format(sql, [email]));
-        console.log(data)
+        // console.log("SQL Query:", mysql.format(sql, [email]));
+        // console.log(data)
         if (data.length === 0) {
             respJson(401, data, `Invalid email or password`, null, res);
             return;
@@ -144,9 +144,9 @@ const verifyAccessToken = (req, res, next) => {
     }
 };
 
-const refreshAccessToken = async (req, res) => {
+const refreshAccessToken = async (cookies, res) => {
     // Read refresh token from the HTTP-only cookie
-    const refreshToken = req.cookies.refreshToken;
+    const { refreshToken } = cookies;
 
     if (!refreshToken) {
         respJson(401, null, "Refresh token is required.", null, res);
@@ -157,9 +157,9 @@ const refreshAccessToken = async (req, res) => {
         // Verify the refresh token
         const decoded = jwt.verify(refreshToken, CONFIG.REFRESH_SECRET);
 
-        // Check if the refresh token exists in the database
-        const tokenSql = `SELECT * FROM refresh_tokens WHERE token = ?`;
-        const tokenData = await query(tokenSql, [refreshToken]);
+        // // Check if the refresh token exists in the database
+        const tokenSql = `SELECT * FROM refresh_tokens WHERE user_id = ?`;
+        const tokenData = await query(tokenSql, [decoded.id]);
 
         if (tokenData.length === 0) {
             respJson(401, null, "Invalid or revoked refresh token.", null, res);
@@ -226,7 +226,8 @@ const revokeAllTokens = async (userId, res) => {
 module.exports = {
     register,
     login,
-    logout
+    logout,
+    refreshAccessToken
 }
 
 // const isTokenRevoked = async (token) => {

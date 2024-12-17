@@ -3,7 +3,7 @@ const router = express.Router();
 const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
 const { showLogs, getLogsbyId, searchLogsbyUserId, borrowBooks, returnBooks } = require("../controller/logs-controller")
 const { calcBorrowedAmount } = require("../controller/calculate-controller")
-const { register, login, logout } = require("../controller/auth")
+const { register, login, logout, refreshAccessToken } = require("../controller/auth")
 /**book**/
 //fetch all book data
 router.get('/books', (req, res) => {
@@ -104,6 +104,11 @@ router.post("/logout", (req, res) => {
     const refreshToken = req.cookies.refreshToken
     logout(res, refreshToken)
 })
+
+// router.post("/test", (req, res) => {
+//     const cookies = req.cookies
+//     refreshAccessToken(cookies, res)
+// })
 
 /**service**/
 //csrf
