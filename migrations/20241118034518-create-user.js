@@ -27,11 +27,24 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model:"roles",
-          key:"id",
+          model: "roles",
+          key: "id",
         },
-        onDelete:"CASCADE",
-        onUpdate:"CASCADE",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
+      token: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      is_logged_in: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      last_login: {
+        allowNull: true,
+        type: Sequelize.DATE,
       },
       created_at: {
         allowNull: false,

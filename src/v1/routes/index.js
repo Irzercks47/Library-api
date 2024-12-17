@@ -3,7 +3,7 @@ const router = express.Router();
 const { showBooks, getBooksbyId, searchBooks, addBooks, updateBooks, deleteBooks } = require("../controller/books-controller")
 const { showLogs, getLogsbyId, searchLogsbyUserId, borrowBooks, returnBooks } = require("../controller/logs-controller")
 const { calcBorrowedAmount } = require("../controller/calculate-controller")
-
+const { register, login, logout } = require("../controller/auth")
 /**book**/
 //fetch all book data
 router.get('/books', (req, res) => {
@@ -92,11 +92,18 @@ router.post("/returnbooks", (req, res) => {
 //register
 router.post("/register", (req, res) => {
     const body = req.body
-    returnBooks(res, body)
+    register(body, res)
 })
 //login
+router.post("/login", (req, res) => {
+    const body = req.body
+    login(body, res)
+})
 //logout
-
+router.post("/logout", (req, res) => {
+    const refreshToken = req.cookies.refreshToken
+    logout(res, refreshToken)
+})
 
 /**service**/
 //csrf
