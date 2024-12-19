@@ -5,7 +5,7 @@ const util = require('util');
 const bcrypt = require('bcryptjs')
 const CONFIG = require('../../../config')
 const jwt = require('jsonwebtoken');
-const mysql = require('mysql')
+// const mysql = require('mysql')
 
 //promisify db query so that we can improve readability and make error handling easier
 const query = util.promisify(db.query).bind(db);
@@ -128,120 +128,29 @@ const logout = async (res, refreshToken) => {
     }
 }
 
-const verifyAccessToken = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-
-    if (!token) {
-        return respJson(401, null, "Access denied. No token provided.", null, res);
-    }
-
-    try {
-        const decoded = jwt.verify(token, CONFIG.SECRET_TOKEN);
-        req.user = decoded; // Attach user info to the request
-        next(); // Proceed to the next middleware
-    } catch (err) {
-        respJson(401, null, "Invalid or expired token.", null, res);
-    }
-};
-
-const refreshAccessToken = async (cookies, res) => {
-    // Read refresh token from the HTTP-only cookie
-    const { refreshToken } = cookies;
-
-    if (!refreshToken) {
-        respJson(401, null, "Refresh token is required.", null, res);
+const registerAdmin = async (body, res) => {
+    const { username, password, email } = body
+    const role_id = 1;
+    if (!username || !password || !email) {
+        respJson(409, null, "Please enter username, password, and email", null, res)
         return;
     }
+    const cipherPass = bcrypt.hashSync(password, 10)
 
+    const insertSql = `INSERT INTO users (username, email, password, role_id, created_at) VALUES (?,?,?,?,?)`
     try {
-        // Verify the refresh token
-        const decoded = jwt.verify(refreshToken, CONFIG.REFRESH_SECRET);
-
-        // // Check if the refresh token exists in the database
-        const tokenSql = `SELECT * FROM refresh_tokens WHERE user_id = ?`;
-        const tokenData = await query(tokenSql, [decoded.id]);
-
-        if (tokenData.length === 0) {
-            respJson(401, null, "Invalid or revoked refresh token.", null, res);
-            return;
-        }
-
-        // Generate a new access token
-        const newAccessToken = jwt.sign(
-            { id: decoded.id },
-            CONFIG.SECRET_TOKEN,
-            { expiresIn: '15m' } // Expires in 15 minutes
-        );
-
-        // Optionally refresh the refresh token itself
-        const newRefreshToken = jwt.sign(
-            { id: decoded.id },
-            CONFIG.REFRESH_SECRET,
-            { expiresIn: '7d' } // Expires in 7 days
-        );
-
-        // Update the refresh token in the database
-        const updateSql = `
-            UPDATE refresh_tokens
-            SET token = ?, expires_at = ?
-            WHERE token = ?
-        `;
-        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
-        await query(updateSql, [newRefreshToken, expiresAt, refreshToken]);
-
-        // Update the refresh token in the cookie
-        res.cookie('refreshToken', newRefreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        });
-
-        // Send the new access token
-        respJson(200, { accessToken: newAccessToken }, "Access token refreshed.", null, res);
+        const data = await query(insertSql, [username, email, cipherPass, role_id, bites_util.curr_date])
+        // console.log(data)
+        // console.log("SQL Query:", mysql.format(insertSql, [username, email, cipherPass, role_id, bites_util.curr_date]));
+        respJson(201, { id: data.insertId }, "Account successfully created", null, res)
     } catch (err) {
-        respJson(403, null, "Invalid or expired refresh token.", null, res);
+        respJson(500, null, err.message, null, res)
     }
-};
-
-
-const revokeAllTokens = async (userId, res) => {
-    try {
-        const sql = `DELETE FROM refresh_tokens WHERE user_id = ?`;
-        const result = await query(sql, [userId]);
-
-        if (result.affectedRows === 0) {
-            respJson(400, null, "No active tokens found for this user.", null, res);
-            return;
-        }
-
-        respJson(200, null, "All tokens revoked for the user.", null, res);
-    } catch (err) {
-        respJson(500, null, "Internal server error.", null, res);
-    }
-};
-
-
+}
 
 module.exports = {
     register,
+    registerAdmin,
     login,
     logout,
-    refreshAccessToken
 }
-
-// const isTokenRevoked = async (token) => {
-//     const sql = `SELECT * FROM revoked_tokens WHERE token = ?`;
-//     const result = await query(sql, [token]);
-//     return result.length > 0;
-// };
-
-// const revokeAccessToken = async (token) => {
-//     const sql = `INSERT INTO revoked_tokens (token) VALUES (?)`;
-//     await query(sql, [token]);
-// };
-// CREATE TABLE revoked_tokens(
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     token TEXT NOT NULL,
-//     revoked_at DATETIME DEFAULT CURRENT_TIMESTAMP
-// );
