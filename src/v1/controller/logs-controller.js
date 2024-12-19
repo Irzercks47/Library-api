@@ -14,6 +14,8 @@ const hideData = true
 
 //show logs
 //joins from books, user, and status
+// further improvisation limiting data to certain time period or limiting data shown
+// or use lazyload but still fetch all of the data and add caching
 const showLogs = async (res, params) => {
     let { page, limit } = params
     page = bites_util.page(page)
@@ -57,11 +59,15 @@ const getLogsbyId = async (res, id) => {
 }
 
 //search logs by user id
+// further improvisation limiting data to certain time period or limiting data shown
+// or use lazyload but still fetch all of the data and add caching
 const searchLogsbyUserId = async (res, user_id, params) => {
     let { page, limit } = params
     page = bites_util.page(page)
     limit = bites_util.limit(limit)
     const offset = bites_util.offset(page, limit)
+    //searching for specific logs by that user_id
+    //join librarylogs, users, books, statuses
     const sql = `SELECT ll.id, b.book_name, u.username, s.status_name, ll.amount, ll.created_at, ll.updated_at, ll.is_deleted
                 FROM librarylogs AS ll
                 JOIN users AS u ON ll.user_id = u.id
@@ -84,13 +90,18 @@ const searchLogsbyUserId = async (res, user_id, params) => {
     }
 }
 
-//borrow book logs
+//borrow book
+//client would sent data that has already been calculated in the /calculate/borrowed-amount endpoint
 const borrowBooks = async (res, body) => {
     const { user_id, amount, final_stock, note, book_id } = body
     const status_id = 1
+    //how this works is to update books data in books table then adding log in the librarylogs table
     const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND stock >= ? AND is_deleted = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, note, created_at) VALUES (?,?,?,?,?,?)"
     try {
+        //we will use transaction as all of these query is important and one of them can't fail
+        //if one of the query fail it will do the rollback and cancel all of the query
+        //if all the query successful then it will commit the change
         await query("START TRANSACTION");
         // console.log(mysql.format(booksSql, [final_stock, bites_util.curr_date, id, amount, showData]));
         const books = await query(booksSql, [final_stock, bites_util.curr_date, book_id, amount, showData])
@@ -108,11 +119,13 @@ const borrowBooks = async (res, body) => {
     }
 }
 
-//return book logs
-//needs to be revised
+//return book
 const returnBooks = async (res, body) => {
+    //return book have the same principal as the borrowing one
     const { note, book_id, log_id } = body
     const status_id = 2
+    //it will take all of the data from database to prevent manipulation from client side
+    //and make the data valid
     const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND is_deleted = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, note, created_at) VALUES (?,?,?,?,?,?)"
     const calcSql = `SELECT b.stock, ll.amount, ll.user_id, ll.is_deleted
@@ -121,7 +134,6 @@ const returnBooks = async (res, body) => {
                     WHERE ll.id = ? AND b.is_deleted = ?`
     const changeLogFlagSql = `UPDATE librarylogs SET is_deleted = ?, updated_at = ? WHERE id = ? AND is_deleted = ?`
     try {
-
         await query("START TRANSACTION");
         // console.log(mysql.format(calcSql, [log_id, showData]));
         const data = await query(calcSql, [log_id, showData]);
@@ -140,6 +152,8 @@ const returnBooks = async (res, body) => {
         // console.log(amount)
         // console.log(final_stock)
 
+        //this is the weird part as we added is_deleted to the log where the status is borrowed 
+        // as we don't really know how the inner workings are so you could change this query if this step aren't needed 
         const changeLog = await query(changeLogFlagSql, [hideData, bites_util.curr_date, log_id, showData])
         // console.log(mysql.format(changeLogFlagSql, [hideData, bites_util.curr_date, log_id, showData]));
         // console.log(changeLog)

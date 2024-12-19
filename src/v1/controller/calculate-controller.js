@@ -13,6 +13,7 @@ const hideData = true
 const calcBorrowedAmount = async (res, body) => {
     let { amount, book_id } = body
     amount = bites_util.intParse(amount)
+    //it will take the stock directly from db instead of client side to make the data not to be tampered
     const sql = `SELECT stock FROM books WHERE id = ? AND is_deleted = ?`
     try {
         const data = await query(sql, [book_id, showData]);
@@ -26,6 +27,7 @@ const calcBorrowedAmount = async (res, body) => {
             respJson(422, null, `Input error: amount exceeds available stock`, null, res);
             return;
         }
+        //this will calculate the amout left in stock
         const final_stock = stock - amount;
         // Respond with the updated amount and remaining stock
         respJson(200, { amount: amount, stock, final_stock: final_stock }, "Success", null, res);

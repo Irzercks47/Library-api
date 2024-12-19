@@ -10,18 +10,20 @@ const jwt = require('jsonwebtoken');
 //promisify db query so that we can improve readability and make error handling easier
 const query = util.promisify(db.query).bind(db);
 
-//DONE
+//Register
 const register = async (body, res) => {
     const { username, password, email } = body
     const role_id = 2;
+    //check if there is data
     if (!username || !password || !email) {
         respJson(409, null, "Please enter username, password, and email", null, res)
         return;
     }
+    //turn password into encrpyted data
     const cipherPass = bcrypt.hashSync(password, 10)
-
     const insertSql = `INSERT INTO users (username, email, password, role_id, created_at) VALUES (?,?,?,?,?)`
     try {
+        //insert data
         const data = await query(insertSql, [username, email, cipherPass, role_id, bites_util.curr_date])
         // console.log(data)
         // console.log("SQL Query:", mysql.format(insertSql, [username, email, cipherPass, role_id, bites_util.curr_date]));
@@ -47,18 +49,20 @@ const login = async (body, res) => {
                 WHERE u.email = ?`
     // Filter user from the users array by username and password
     try {
+        //insert data
         const data = await query(sql, [email]);
         // console.log("SQL Query:", mysql.format(sql, [email]));
         // console.log(data)
+        //check if there is data
         if (data.length === 0) {
             respJson(401, data, `Invalid email or password`, null, res);
             return;
         }
         const user = data[0];
-        console.log(user?.password)
 
         // Compare passwords
         const passwordMatches = bcrypt.compareSync(password, user.password);
+        //if password not matches
         if (!passwordMatches) {
             respJson(401, null, "Invalid email or password", null, res); // HTTP 401 Unauthorized
             return;
@@ -98,8 +102,10 @@ const login = async (body, res) => {
         respJson(500, null, err.message || "there is no user", null, res)
     }
 }
-//DONE
+
+//logout
 const logout = async (res, refreshToken) => {
+    //check if there is refreshtoken in cookies
     if (!refreshToken) {
         respJson(400, null, "Refresh token is required.", null, res);
         return;
@@ -128,6 +134,7 @@ const logout = async (res, refreshToken) => {
     }
 }
 
+//register new admin user
 const registerAdmin = async (body, res) => {
     const { username, password, email } = body
     const role_id = 1;
