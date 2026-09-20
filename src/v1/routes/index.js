@@ -113,13 +113,13 @@ router.post("/logout", verifyAccessToken, (req, res) => {
 // router.get("/csrf", (req, res) => {
 //     res.send("test")
 // })
-//revoke all tokens
+//refresh token
 router.post("/refresh", (req, res) => {
     const refreshToken = req.cookies.refreshToken
     refreshAccessToken(refreshToken, res,)
 })
 
-//refresh token
+//revoke all tokens
 router.post("/revoke-all-tokens/:user_id", verifyAccessToken, restrictToAdmin, (req, res) => {
     const user_id = req.params.user_id
     revokeAllTokens(user_id, res)

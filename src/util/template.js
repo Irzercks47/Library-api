@@ -1,6 +1,6 @@
 const respJson = (status_code, data, status_message, paginate, res) => {
     //json response template
-    res.json(status_code, [
+    res.status(status_code).json([
         {
             payload: data,
             meta: {

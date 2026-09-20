@@ -41,8 +41,6 @@ const login = async (body, res) => {
         respJson(400, null, "Please enter email and password", null, res)
         return;
     }
-    // console.log(password)
-    // console.log(email)
     const sql = `SELECT u.id, u.username, u.password, r.role_name
                 FROM users AS u
                 JOIN roles as r ON u.role_id = r.id
