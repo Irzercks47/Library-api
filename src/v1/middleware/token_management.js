@@ -39,7 +39,7 @@ const refreshAccessToken = async (cookies, res) => {
         // Verify the refresh token
         const decoded = jwt.verify(refreshToken, CONFIG.REFRESH_SECRET);
 
-        // // Check if the refresh token exists in the database
+        // Check if the refresh token exists in the database
         const tokenSql = `SELECT * FROM refresh_tokens WHERE user_id = ?`;
         const tokenData = await query(tokenSql, [decoded.id]);
 
@@ -95,7 +95,7 @@ const revokeAllTokens = async (user_id, res) => {
         }
 
         const sql = `DELETE FROM refresh_tokens WHERE user_id = ?`;
-        const result = await query(sql, [userId]);
+        const result = await query(sql, [user_Id]);
 
         if (result.affectedRows === 0) {
             respJson(400, null, "No active tokens found for this user.", null, res);

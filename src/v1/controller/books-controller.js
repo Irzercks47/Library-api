@@ -120,7 +120,7 @@ const deleteBooks = async (res, id) => {
     //delete book data
     const sql = `UPDATE books SET is_deleted = ?, deleted_at = ? WHERE id = ? AND is_deleted = ?`
     try {
-        const data = await query(sql, [hideData, bites_util.curr_date, id, hideData]);
+        const data = await query(sql, [hideData, bites_util.curr_date, id, showData]);
         if (data.length == 0) {
             respJson(404, null, `No book found with ID ${id}`, null, res)
             return

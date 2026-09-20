@@ -115,8 +115,8 @@ router.post("/logout", verifyAccessToken, (req, res) => {
 // })
 //refresh token
 router.post("/refresh", (req, res) => {
-    const refreshToken = req.cookies.refreshToken
-    refreshAccessToken(refreshToken, res,)
+    const refreshToken = req.cookies
+    refreshAccessToken(refreshToken, res)
 })
 
 //revoke all tokens
