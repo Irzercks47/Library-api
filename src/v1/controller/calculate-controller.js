@@ -13,6 +13,9 @@ const hideData = true
 const calcBorrowedAmount = async (res, body) => {
     let { amount, book_id } = body
     amount = bites_util.intParse(amount)
+    if (!amount) {
+        respJson(422, null, `amount is not integer`, null, res)
+    }
     //it will take the stock directly from db instead of client side to make the data not to be tampered
     const sql = `SELECT stock FROM books WHERE id = ? AND is_deleted = ?`
     try {

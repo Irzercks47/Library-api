@@ -1,11 +1,11 @@
 const { paginateTemplate } = require("./template");
 
 const bites_util = {
-    get curr_date() {return new Date().toISOString()},
+    get curr_date() { return new Date().toISOString() },
     offset: (page, limit) => (page - 1) * limit,
     page: (page) => Math.max(parseInt(page, 10) || 1),
-    limit: (limit) => Math.max(parseInt(limit, 10) || 10),
-    intParse: (stock) => parseInt(stock, 10)
+    limit: (limit) => Math.min(Math.max(parseInt(limit, 10) || 10), 100),
+    intParse: (stock) => parseInt(stock)
 }
 
 const paginate = async (query, countSql, sqlParams, limit, page) => {

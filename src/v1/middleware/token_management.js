@@ -95,7 +95,7 @@ const revokeAllTokens = async (user_id, res) => {
         }
 
         const sql = `DELETE FROM refresh_tokens WHERE user_id = ?`;
-        const result = await query(sql, [user_Id]);
+        const result = await query(sql, [user_id]);
 
         if (result.affectedRows === 0) {
             respJson(400, null, "No active tokens found for this user.", null, res);

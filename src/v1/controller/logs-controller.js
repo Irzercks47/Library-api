@@ -9,6 +9,7 @@ const query = util.promisify(db.query).bind(db);
 const showData = false
 const hideData = true
 
+
 // Debug the SQL query
 // console.log("SQL Query:", mysql.format(sql, [book_id, showData]));
 
@@ -30,8 +31,12 @@ const showLogs = async (res, params) => {
                 LIMIT ? OFFSET ?`
     const countSql = `SELECT COUNT(id) AS total from librarylogs`
     try {
-        const data = await query(sql, [limit, offset])
-        const pagination = await paginate(query, countSql, null, limit, page)
+        const [data, pagination] = await Promise.all([
+            query(sql, [limit, offset]),
+            paginate(query, countSql, null, limit, page)
+        ])
+        // const data = await query(sql, [limit, offset])
+        // const pagination = await paginate(query, countSql, null, limit, page)
         respJson(200, data, "succes", pagination, res)
     } catch (err) {
         respJson(500, null, err.message || "an eror occured", null, res)
@@ -95,6 +100,7 @@ const searchLogsbyUserId = async (res, user_id, params) => {
 const borrowBooks = async (res, body) => {
     const { user_id, amount, final_stock, note, book_id } = body
     const status_id = 1
+    const connection = await db.getConnection()
     //how this works is to update books data in books table then adding log in the librarylogs table
     const booksSql = "UPDATE books SET stock = ?, updated_at = ? WHERE id = ? AND stock >= ? AND is_deleted = ?"
     const logsSql = "INSERT INTO librarylogs (book_id, user_id, status_id, amount, note, created_at) VALUES (?,?,?,?,?,?)"
@@ -102,20 +108,22 @@ const borrowBooks = async (res, body) => {
         //we will use transaction as all of these query is important and one of them can't fail
         //if one of the query fail it will do the rollback and cancel all of the query
         //if all the query successful then it will commit the change
-        await query("START TRANSACTION");
+        await connection.beginTransaction()
         // console.log(mysql.format(booksSql, [final_stock, bites_util.curr_date, id, amount, showData]));
-        const books = await query(booksSql, [final_stock, bites_util.curr_date, book_id, amount, showData])
+        const books = await connection.query(booksSql, [final_stock, bites_util.curr_date, book_id, amount, showData])
         if (books.affectedRows === 0) {
             respJson(404, null, `No book found with ID ${book_id}`, null, res);
             await query("ROLLBACK");
             return;
         }
-        const logs = await query(logsSql, [book_id, user_id, status_id, amount, note, bites_util.curr_date])
-        await query("COMMIT");
+        const logs = await connection.query(logsSql, [book_id, user_id, status_id, amount, note, bites_util.curr_date])
+        await connection.commit()
         respJson(200, { logs_id: logs.insertId, books_id: book_id }, "Book borrowed successfully", null, res)
     } catch (err) {
-        await query("ROLLBACK");
+        await connection.rollback()
         respJson(500, null, "Failed to borrow book", null, res)
+    } finally {
+        connection.release()
     }
 }
 

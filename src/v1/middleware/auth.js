@@ -20,7 +20,7 @@ const register = async (body, res) => {
         return;
     }
     //turn password into encrpyted data
-    const cipherPass = bcrypt.hashSync(password, 10)
+    const cipherPass = await bcrypt.hash(password, 10)
     const insertSql = `INSERT INTO users (username, email, password, role_id, created_at) VALUES (?,?,?,?,?)`
     try {
         //insert data
@@ -59,7 +59,7 @@ const login = async (body, res) => {
         const user = data[0];
 
         // Compare passwords
-        const passwordMatches = bcrypt.compareSync(password, user.password);
+        const passwordMatches = await bcrypt.compare(password, user.password);
         //if password not matches
         if (!passwordMatches) {
             respJson(401, null, "Invalid email or password", null, res); // HTTP 401 Unauthorized
@@ -140,7 +140,7 @@ const registerAdmin = async (body, res) => {
         respJson(409, null, "Please enter username, password, and email", null, res)
         return;
     }
-    const cipherPass = bcrypt.hashSync(password, 10)
+    const cipherPass = await bcrypt.hash(password, 10)
 
     const insertSql = `INSERT INTO users (username, email, password, role_id, created_at) VALUES (?,?,?,?,?)`
     try {

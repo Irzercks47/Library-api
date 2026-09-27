@@ -19,19 +19,17 @@ const showBooks = async (res, params) => {
     limit = bites_util.limit(limit)
     const offset = bites_util.offset(page, limit)
     //select data where it doesn't have is_deleted flag 
-    const sql = "SELECT * FROM books WHERE is_deleted = ? LIMIT ? OFFSET ?"
+    const sql = "SELECT id, book_name, author, summary, book_cover, date_published, stock, created_at, updated_at FROM books WHERE is_deleted = ? LIMIT ? OFFSET ?"
     const countSql = `SELECT COUNT(id) AS total FROM books WHERE is_deleted = ?`
     try {
         //you can use promise all for this but the loads in system is bigger
-        /*
-            const [data, pagination] = await Promise.all([
-                query(sql, [limit, offset]),
-                paginate(query, countSql, limit, page),
-            ]);        
-        */
+        const [datas, pagination] = await Promise.all([
+            query(sql, [limit, offset]),
+            paginate(query, countSql, limit, page),
+        ]);
         //but using this without promise all can take away user time so the use of it depends on the machine
-        const datas = await query(sql, [showData, limit, offset]);
-        const pagination = await paginate(query, countSql, showData, limit, page)
+        // const datas = await query(sql, [showData, limit, offset]);
+        // const pagination = await paginate(query, countSql, showData, limit, page)
         respJson(200, datas, "succes", pagination, res)
     } catch (err) {
         respJson(500, null, err.message || "an eror occured", null, res)
@@ -41,7 +39,7 @@ const showBooks = async (res, params) => {
 //get books by id
 const getBooksbyId = async (res, id) => {
     //select data according to id and where it doesn't have is_deleted flag 
-    const sql = `SELECT * FROM books WHERE id = ? AND is_deleted = ?`
+    const sql = `SELECT id, book_name, author, summary, book_cover, date_published, stock, created_at, updated_at FROM books WHERE id = ? AND is_deleted = ?`
     try {
         const data = await query(sql, [id, showData]);
         if (data.length === 0) {
@@ -63,7 +61,7 @@ const searchBooks = async (res, params) => {
     limit = bites_util.limit(limit)
     const offset = bites_util.offset(page, limit)
     //select data according to keyword and where it doesn't have is_deleted flag 
-    const sql = `SELECT * FROM books WHERE is_deleted = ? AND book_name LIKE ?   
+    const sql = `SELECT id, book_name, author, summary, book_cover, date_published, stock, created_at, updated_at FROM books WHERE is_deleted = ? AND book_name LIKE ?   
                 LIMIT ? OFFSET ?`
     const countSql = `SELECT COUNT(*) AS total FROM books WHERE book_name LIKE ? AND is_deleted = ?`
     const countSqlParams = [`%${search}%`, showData]
@@ -121,7 +119,7 @@ const deleteBooks = async (res, id) => {
     const sql = `UPDATE books SET is_deleted = ?, deleted_at = ? WHERE id = ? AND is_deleted = ?`
     try {
         const data = await query(sql, [hideData, bites_util.curr_date, id, showData]);
-        if (data.length == 0) {
+        if (data.affectedRows === 0) {
             respJson(404, null, `No book found with ID ${id}`, null, res)
             return
         }
